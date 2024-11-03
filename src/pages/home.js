@@ -49,13 +49,18 @@ function Home() {
   };
 
   const handleDelete = async (id) => {
-   try {
+      const confirmed = window.confirm("Are you sure you want to delete this user?");
+      
+      if (confirmed) {
+        try {
       await deleteDoc(doc(db, 'users', id)); // Delete the user document from Firestore
       setUsers(users.filter(user => user.id !== id)); // Update local state
       alert("User deleted successfully");
     } catch (err) {
       console.error("Error deleting user:", err);
-    }  };
+    }  
+      }
+  };
 
    const handleSave = (updatedData) => {
     console.log(updatedData);
@@ -64,6 +69,8 @@ function Home() {
   
   return (  
      <div className="bg-gray-100">
+       {loading && <p>Loading...</p>}
+      {error && <p>Error: {error}</p>}
       {users.map(user => (
        <UserCard
         id={user.id}

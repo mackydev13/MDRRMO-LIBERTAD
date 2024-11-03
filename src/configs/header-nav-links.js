@@ -1,6 +1,6 @@
 export const navigation = [
-  { name: 'Home', path: '/' },
-  // { name: 'Reports', path: '/reports' },
+    { name: 'Emergency Reports', path: '/reports' },
+  { name: 'User Information', path: '/' },
 ]
 
 export const userNavigation = [
