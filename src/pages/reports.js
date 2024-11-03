@@ -49,7 +49,7 @@ function Reports() {
           user={incident.userId}
           imageUrl={ require('../assets/test.jpeg')}
           title={incident.victimName}
-          location={incident.location.latitude + "," + incident.location.longitude}
+          location={incident.location}
           description={incident.description}
           date={incident.createdAt.toDate().toLocaleDateString()}
           status={'pending'}
