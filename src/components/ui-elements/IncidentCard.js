@@ -1,6 +1,29 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
+import axios from 'axios';
 
 const IncidentCard = ({ user,title, description, date, imageUrl,location, status }) => {
+  
+  const [address, setAddress] = useState('');
+
+  useEffect(() => {
+    getAddressFromLatLng(location.latitude, location.longitude); // Call the getAddressFromLatLng function with default values
+  }, []);
+
+
+
+  const getAddressFromLatLng = async (lat, lng) => {
+  const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`;
+
+  try {
+    const response = await axios.get(url);
+    const address = response.data.display_name; // Get the formatted address
+    setAddress(address);
+  } catch (error) {
+    console.error("Error fetching address:", error);
+    return null; // Handle error as needed
+  }
+};
+
   return (
     <div className="bg-white flex flex justify-around items-center shadow-lg rounded-lg p-6 mx-auto mb-4">
       {imageUrl && (
@@ -16,7 +39,7 @@ const IncidentCard = ({ user,title, description, date, imageUrl,location, status
       
       <div className="text-gray-500 text-sm mb-4">
         <p><span className="font-semibold">Date:</span> {date}</p>
-        <p><span className="font-semibold">Location:</span> {location}</p>
+        <p><span className="font-semibold">Location:</span> {address}</p>
         <p><span className="font-semibold">Status:</span> {status}</p>
       </div>
 
@@ -24,8 +47,8 @@ const IncidentCard = ({ user,title, description, date, imageUrl,location, status
         {/* <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"> */}
         {/*   View Details */}
         {/* </button> */}
-        <button className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">
-          Responce
+        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+          Accept
         </button>
         <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
           Delete
