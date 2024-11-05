@@ -7,6 +7,7 @@ import ContactUs from 'pages/contact-us'
 import Home from 'pages/home'
 import Login from 'pages/login'
 import Logout from 'pages/logout'
+import Hotline from 'pages/hotline'
 import NotFound404 from 'pages/not-found-404'
 import Register from 'pages/register'
 import Reports from 'pages/reports'
@@ -34,6 +35,10 @@ const routes = [
       {
         path: '/reports',
         element: <Reports />,
+      },
+      {
+        path: '/hotline',
+        element: <Hotline />,
       },
       {
         path: '/logout',
