@@ -1,7 +1,7 @@
 import React,{useEffect,useState} from 'react';
 import axios from 'axios';
 
-const IncidentCard = ({ user,title, description, date, imageUrl,location, status }) => {
+const IncidentCard = ({id, user,title, description, date, imageUrl,location, status,onDelete,onAccept }) => {
   
   const [address, setAddress] = useState('');
 
@@ -24,7 +24,8 @@ const IncidentCard = ({ user,title, description, date, imageUrl,location, status
   }
 };
 
-  return (
+   
+return (
     <div className="bg-white flex flex justify-around items-center shadow-lg rounded-lg p-6 mx-auto mb-4">
       {imageUrl && (
         <img
@@ -47,10 +48,10 @@ const IncidentCard = ({ user,title, description, date, imageUrl,location, status
         {/* <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"> */}
         {/*   View Details */}
         {/* </button> */}
-        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600" onClick={onAccept}>
           Accept
         </button>
-        <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+        <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600" onClick={onDelete}n>
           Delete
         </button>
       </div>
