@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import IncidentCard from 'components/ui-elements/IncidentCard'
-import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc,updateDoc, doc } from 'firebase/firestore';
 import {db} from '../configs/firebase'
 
 function Reports() {
@@ -37,7 +37,22 @@ function Reports() {
     fetchIncidents();
   }, []);
   
-  console.log(incidents);
+
+  const deleteIncident = async (id) => {
+    const validation = window.confirm('Are you sure you want to delete this incident?');
+    const incidentDoc = doc(db, 'incidents', id);
+    await deleteDoc(incidentDoc);
+    const updatedIncidents = incidents.filter((incident) => incident.id !== id);
+    setIncidents(updatedIncidents);
+  };
+
+  const AcceptIncident = async (id) => {
+    const validation = window.confirm('Are you sure you want to accept this incident?');
+    const incidentDoc = doc(db, 'incidents', id);
+    await updateDoc(incidentDoc, {description: 'Rescue Is Comming'});
+    const updatedIncidents = incidents.filter((incident) => incident.id !== id);
+    setIncidents(updatedIncidents);
+  }
 
    return (
     <div className="bg-gray-100">
@@ -51,6 +66,8 @@ function Reports() {
           title={incident.victimName}
           location={incident.location}
           description={incident.description}
+          onDelete={() => deleteIncident(incident.id)}
+          onAccept={() => AcceptIncident(incident.id)}
           date={incident.createdAt.toDate().toLocaleDateString()}
           status={'pending'}
         />
