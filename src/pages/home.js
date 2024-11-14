@@ -4,7 +4,28 @@ import UserCard from 'components/ui-elements/UserCard';
 import EditUserModal from 'components/ui-elements/EditUserModal';
 import {db} from '../configs/firebase'
 import { collection, getDocs , deleteDoc, doc} from 'firebase/firestore';
+import CardContainer from 'components/ui-elements/CardContainer';
+import { DataGrid } from '@mui/x-data-grid';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import DaataGridTable from "components/ui-elements/DataGridTable";
 
+
+const columns = [
+  { field: 'id', headerName: 'ID', width: 200 },
+  {field: 'Profile', headerName: 'Profile', width: 200},
+  { field: 'name', headerName: 'fullName', width: 150 },
+    {
+    field: 'age',
+    headerName: 'Age',
+    type: 'number',
+    width:100,
+  },
+  { field: 'address', headerName: 'Address', width: 150 },
+  { field: 'contact', headerName: 'Contact', width: 150 },
+  { field: 'email', headerName: 'Email', width: 150 },
+  { field: 'createdAt', headerName: 'Registered Date', width: 130 },
+];
 
 function Home() {
     
@@ -30,9 +51,12 @@ function Home() {
           id: doc.id,
           ...doc.data()
         }));
-        
+
         // Update the users state
         setUsers(usersList);
+
+
+        console.log(usersList);
       } catch (err) {
         setError(err.message);
         console.log(err.message);
@@ -41,9 +65,6 @@ function Home() {
       }
     };
   
-  
-
-  console.log(userData);
   const handleEdit = () => {
     console.log("Edit button clicked");
   };
@@ -92,6 +113,26 @@ function Home() {
         userData={userData}
         onSave={handleSave}
       />
+
+      {/* <CardContainer title="Users List" > */}
+        {/* <DaataGridTable col={columns} rowData={users}/> */}
+    {/*   <div className="flex flex-row justify-between"> */}
+    {/*     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"> */}
+    {/*       add user */}
+    {/*     </button> */}
+    {/*   </div> */}
+    {/**/}
+    {/*   <Box sx={{ height: 400, width: '100%' }}> */}
+    {/*   <DataGrid */}
+    {/*     rows={rows} */}
+    {/*     columns={columns} */}
+    {/*     initialState={{ pagination: { paginationModel } }} */}
+    {/*     pageSizeOptions={[5, 10]} */}
+    {/*     checkboxSelection */}
+    {/*     sx={{ border: 0 }} */}
+    {/*   /> */}
+    {/* </Box> */}
+      {/* </CardContainer> */}
      </div>
   );
  }
