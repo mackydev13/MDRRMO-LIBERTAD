@@ -1,32 +1,21 @@
-import React, { useState, useEffect } from 'react';
+ import React, { useState, useEffect } from 'react';
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 
-const MapTracker = ({ firebaseLat, firebaseLng }) => {
-  const [location, setLocation] = useState({lat: firebaseLat, lng:  firebaseLng}); // Default to San Francisco
-
-  console.log(firebaseLat,firebaseLng);
-
-  // Load Google Maps
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: 'AIzaSyB7ETOwK6NMmiPXlHUAThIjfDbCxXq_A6c', // replace with your API key
-  });
-
-  // Map container style
-  const mapContainerStyle = {
-    width: '100%',
-    height: '600px',
-  };
-
+const MapTracker = ({ initialLat, initialLng }) => {
+    const mapSrc = `https://www.google.com/maps?q=${initialLat ?? 11.76939},${initialLng?? 121.91882}&z=15&output=embed`;
+    
   return (
     <div>
-      {isLoaded && location && (
-        <GoogleMap
-          mapContainerStyle={mapContainerStyle}
-          center={location}
-          zoom={15}
-        >
-          <Marker position={location} />
-        </GoogleMap>
+      {(
+      <>
+      <div className="mapouter">
+        <div className="gmap_canvas">
+            <iframe width="100%" height="500" id="gmap_canvas" src={mapSrc} frameBorder="0" scrolling="no" marginHeight="0" marginWidth="0">
+            </iframe>
+        </div>
+      </div>
+
+      </>
       )}
     </div>
   );

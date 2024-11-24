@@ -1,20 +1,14 @@
 import React, {useEffect, useState} from 'react'
-import IncidentCard from 'components/ui-elements/IncidentCard'
 import { collection, getDocs, deleteDoc,updateDoc, doc } from 'firebase/firestore';
 import {db} from '../configs/firebase'
 import MapTracker from 'components/ui-elements/MapTracker';
-import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 import { GridRowModes,GridActionsCellItem } from '@mui/x-data-grid';
-import Box from '@mui/material/Box';
-import DaataGridTable from "components/ui-elements/DataGridTable";
+import DataGridTable from "components/ui-elements/DataGridTable";
 
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
 import CardContainer from 'components/ui-elements/CardContainer';
-import { date } from 'yup';
+import ReverseGeocode from 'components/ui-elements/ReverseGeocode';
 
 
 
@@ -25,19 +19,14 @@ function Reports() {
   const [error, setError] = useState(null);
   const [rowModesModel, setRowModesModel] = React.useState({});
   const [isAccepted, setIsAccepted] = useState(false);
-  const [location, setLocation] = useState({ lat: 37.7749, lng: -122.4194 }); // Default to San Francisco
-  
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: 'AIzaSyB7ETOwK6NMmiPXlHUAThIjfDbCxXq_A6c', // replace with your API key
-  });
-
-
-
+  const [location, setLocation] = useState({ lat: 11.76939, lng: 121.91882 });
+  const [selection ,setSelection] = useState(true);
+  const [selectedRows, setSelectedRows] = useState([]);
 
   useEffect(() => {
    
     fetchIncidents();
-    
+  
   }, []);
 
    const fetchIncidents = async () => {
@@ -56,140 +45,167 @@ function Reports() {
       }
     };
   
-
-  const deleteIncident = async (id) => {
+  const deleteIncident = (id) => async () => {
     const validation = window.confirm('Are you sure you want to delete this incident?');
     const incidentDoc = doc(db, 'incidents', id);
     await deleteDoc(incidentDoc);
     const updatedIncidents = incidents.filter((incident) => incident.id !== id);
+
     setIncidents(updatedIncidents);
   };
 
-  const AcceptIncident = async (id) => {
+
+  const AcceptIncident = (id) => async () => {
+   try {
     const validation = window.confirm('Are you sure you want to accept this incident?');
-    const incidentDoc = doc(db, 'incidents', id);
-    await updateDoc(incidentDoc, {status: 'On-Going Rescue'});
-    const updatedIncidents = incidents.filter((incident) => incident.id !== id);
+    if (!validation) return;
     
+    const incidentDoc = doc(db, 'incidents', id);
+    await updateDoc(incidentDoc, { status: 'On-Going Rescue' });
+    console.log('Document updated successfully');
+    
+    const updatedIncidents = incidents.filter((row) => row.id !== id);
+    setIncidents((prevIncidents) =>
+      prevIncidents.map((incident) =>
+        incident.id === id ? { ...incident, status: 'On-Going Rescue' } : incident
+      )
+    );
+
+    incidents.map(loc => {
+      console.log(loc.location.latitude,loc.location.longitude);
+      mapLocation(loc.location.latitude,loc.location.longitude);
+    });
+    
+  } catch (error) {
+    console.error('Error updating document:', error);
+  }
   }
 
-  console.log(incidents);
-  
   const mapLocation = (lat, lng) => {
     setLocation({ lat: lat, lng: lng });
   }
   
 
- const handleEditClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-  };
+  const handleSelectionChange = (selectionModel) => {
+    const selectedData = incidents.filter((incident) =>
+      selectionModel.includes(incident.id)
+    );
 
-  const handleSaveClick = (id) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-  };
+    setSelectedRows(selectedData);
 
-  const handleDeleteClick = (id) => () => {
-    setIncidents(incidents.filter((row) => row.id !== id));
-  };
-
-  const handleCancelClick = (id) => () => {
-    setRowModesModel({
-      ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
-    });
-
-    const editedRow = incidents.find((row) => row.id === id);
-    if (editedRow.isNew) {
-      setIncidents(incidents.filter((row) => row.id !== id));
+    if (selectedData.length === 1) {
+      const selectedIncident = selectedData[0];
+      const lat = selectedIncident.location.latitude;
+      const lng = selectedIncident.location.longitude;
+      setLocation({ lat: lat, lng: lng });
     }
+
   };
 
-
+  const showLocation = (lat, lng) => () => {
+    setLocation({ lat: lat, lng: lng });
+  }
+  
+  // const pendingIncidents = incidents.filter((incident) => incident.status === 'Pending');
 
   const columns = [
-  {field: 'id', width: 100},
-  {field: 'image', width: 100 },
-  {field: 'victimName', width: 150},
-  {field: 'description', width: 200},
-  {field: 'status', width: 150},
-  // {field: 'createdAt', width: 150 },
+  {field: 'id',headerName: 'ID', width: 100},
+  {field: 'victimName',headerName: 'Victim', width: 150},
+  {field: 'description',headerName: 'Description', width: 200},
+  {field: 'status',headerName: 'Status', width: 150},
+  {field: 'createdAt',headerName: 'Date', width: 150 },
   {field: 'action', type: 'actions',
   headerName: 'Actions',
   width: 100,
   cellClassName: 'actions',
-      getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
-        if (isInEditMode) {
-          return [
-            <GridActionsCellItem
-              icon={<SaveIcon />}
-              label="Save"
-              sx={{
-                color: 'primary.main',
-              }}
-              onClick={handleSaveClick(id)}
-            />,
-            <GridActionsCellItem
-              icon={<CancelIcon />}
-              label="Cancel"
-              className="textPrimary"
-              onClick={handleCancelClick(id)}
-              color="inherit"
-            />,
-          ];
-        }
-
-        return [
+      getActions: ({ id }) => {     
+      const incident = incidents.find((incident) => incident.id === id);
+      return [
+        incident?.status !== 'Pending' && (
           <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id)}
-            color="inherit"
-          />,
+          icon={<LocationSearchingIcon />}
+          label="Accept"
+          className="textPrimary"
+          onClick={showLocation(incident.location.latitude,incident.location.longitude)}
+          color="green"
+        />
+        ),
+        incident?.status !== 'On-Going Rescue' && (
+          <>
           <GridActionsCellItem
-            icon={<DeleteIcon />}
+          icon={<LocationSearchingIcon />}
+          label="Accept"
+          className="textPrimary"
+          onClick={AcceptIncident(id)}
+          color="green"
+        />
+          <GridActionsCellItem
+            icon={<ThumbDownIcon />}
             label="Delete"
-            onClick={handleDeleteClick(id)}
+            onClick={deleteIncident(id)}
             color="inherit"
-          />,
-        ];
+          />
+          </>
+        ),
+      ].filter(Boolean);
       },
     }
   ];
 
-   return (
-      <CardContainer>
-      <div className="flex">
-      <div className='flex flex-col'>
-      <h1>Emergency Reports</h1>
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
-          <DaataGridTable col={columns} rowData={incidents}/>
-      {/*      {incidents.map(incident => ( */}
-      {/*       // <IncidentCard */}
-      {/*   //   key={incident.id} */}
-      {/*   //   user={incident.userId} */}
-      {/*   //   imageUrl={ require('../assets/test.jpeg')} */}
-      {/*   //   title={incident.victimName} */}
-      {/*   //   location={incident.location} */}
-      {/*   //   description={incident.description} */}
-      {/*   //   onDelete={() => deleteIncident(incident.id)} */}
-      {/*   //   onAccept={() => AcceptIncident(incident.id) && setLocation({lat: incident.location.latitude, lng: incident.location.longitude})} */}
-      {/*   //   date={incident.createdAt.toDate().toLocaleDateString()} */}
-      {/*   //   status={incident.status} */}
-      {/*   // />  */}
-      {/* ))} */}
+  console.log(selectedRows);
 
-      </div>
-      <div style={{width:'150%', padding: '10px'}}  >
-                <h1>Map</h1>
-          {<MapTracker initialLat={location.lat} initialLng={location.lng}/>}
-      </div>
-     </div>
 
-      </CardContainer>
+  return (
+    <CardContainer>
+      <div className="flex flex-col">
+        <div style={{ margin: 5 }}>
+          {<MapTracker initialLat={location.lat} initialLng={location.lng} />}
+        </div>
+        <div className="flex">
+          <div>
+            <DataGridTable
+              selectionRow={selection}
+              col={columns}
+              rowData={incidents}
+              selectedRowData={handleSelectionChange} // Callback for row selection
+            />
+            {error && <p>Error: {error}</p>}
+          </div>
+          <div className="flex flex-col  max-w-1/2 ml-4 shadow-lg rounded-lg justify-evenly p-2 w-1/2" style={{ width: "100%" , backgroundColor: '#0B5A81'}}>
+
+            <h2 className="text-4xl text-center text-white font-bold">Incident Details</h2>
+            <h2 className='p-2 text-center'><strong className="text-white">Status:</strong> <strong style={{color: 'green'}}>{selectedRows[0]?.status}</strong></h2>
+              <div className="flex">
+              <div className="w-full">
+              <img
+                src={selectedRows[0]?.imageUrl || require('../assets/test.jpeg')}
+                alt="Incident"
+                style={{ width: "100%", objectPosition: "center", objectFit: "cover", borderRadius: "10px" }}
+              />
+            </div>
+            <div className="flex flex-col w-full">
+
+            <div>
+            <div className="flex flex-col">
+                    <div className="flex text-white flex-col m-2">
+                    <h2 className='p-2'><strong>Description:</strong> {selectedRows[0]?.description}</h2>
+                    <h2 className='p-2'><strong>Time:</strong> {selectedRows[0]?.createdAt.toDate().toLocaleTimeString()}</h2>
+                    <h2 className='p-2'><strong>Date:</strong> {selectedRows[0]?.createdAt.toDate().toLocaleDateString()}</h2>
+                    {/* <h2>Location: {ReverseGeocode({ lat: row.location.latitude, lng: row.location.longitude })}</h2> */}
+                  </div>
+                  <div className="flex flex-col text-white m-2">
+                    <h2 className='p-2'><strong>Victim ID:</strong> {selectedRows[0]?.id}</h2>
+                    <h2 className='p-2'><strong>Victim Name:</strong> {selectedRows[0]?.victimName}</h2>
+                    <h2 className='p-2'><strong>Contact:</strong> {selectedRows[0]?.contact}</h2>
+                  </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </CardContainer>
   );
 }
 
