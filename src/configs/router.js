@@ -4,7 +4,8 @@ import PrimaryLayout from 'components/layout/primary-layout'
 import PrivateRoutes from 'components/router/private-routes'
 
 import ContactUs from 'pages/contact-us'
-import Home from 'pages/home'
+import Dashboard  from 'pages/dashboard'
+import Information from 'pages/userInformation'
 import Login from 'pages/login'
 import Logout from 'pages/logout'
 import Hotline from 'pages/hotline'
@@ -26,7 +27,11 @@ const routes = [
     children: [
       {
         index: true,
-        element: <Home />,
+        element: <Dashboard />,
+      },
+      {
+        path: '/Info',
+        element: <Information />,
       },
       {
         path: '/settings',

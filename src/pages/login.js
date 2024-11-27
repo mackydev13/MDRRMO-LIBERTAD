@@ -29,18 +29,19 @@ function Login() {
   useAutoLogin() // will redirect to '/' or '/from-path' if user is logged in
 
   return (
-    <div className="Login borde  flex min-h-full flex-col justify-center items-center px-6 py-12 lg:px-8" style={{ backgroundColor: '#21cae917' }}>
-
-      <h2 className="mt-10 mb-10 text-center text-4xl font-bold leading-9 tracking-tight text-blue-800">
-          MDRRMO-LIBERTAD
-        </h2>   
-        <img className="h-30 w-40 rounded-full bg-white" src={require('../assets/libertad.png')} alt="Logo"/>
-         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-       <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Sign in
-        </h2>
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form onSubmit={handleSubmit(onSubmit)} className="login-form space-y-6">
+    <div className='flex h-full justify-between'>
+    <div className='flex w-full flex-col items-center justify-center rounded-lg p-4 '>
+      <img className="rounded-full bg-white" style={{width:'40%'}} src={require('../assets/libertad.png')} alt="Logo" />
+      <h2 className="mt-10 text-center text-5xl font-bold leading-9 tracking-tight text-blue-800">
+        MDRRMO-LIBERTAD
+      </h2>
+    </div>
+    <div className='w-2/4 flex justify-center flex-col p-4' style={{background:"rgb(11, 90, 129)"}}>
+      <h2 className="text-center text-6xl font-bold leading-9 tracking-tight text-white">
+        Sign in
+      </h2>
+      <div className="mt-10 p-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="login-form space-y-8 text-white">
           <InputField
             label="Email address"
             name="email"
@@ -66,7 +67,7 @@ function Login() {
           />
         </form>
 
-        <p className="mt-10 text-center text-sm text-gray-500">
+        {/* <p className="mt-10 text-center text-sm text-gray-500">
           Don't have an account ?
           <span>
             <Link
@@ -76,12 +77,9 @@ function Login() {
               Sign up
             </Link>
           </span>
-        </p>
+        </p> */}
       </div>
-
-        
-      </div>
-  
+    </div>  
     </div>
   )
 }
