@@ -14,70 +14,39 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
 
+import { fetchData,selectData,addData, updateData, deleteData } from 'store/Data';
 
-const columns = [
-  { field: 'id', headerName: 'ID', width: 200 },
-  {field: 'Profile', headerName: 'Profile', width: 200},
-  { field: 'name', headerName: 'fullName', width: 150 },
-    {
-    field: 'age',
-    headerName: 'Age',
-    type: 'number',
-    width:100,
-  },
-  { field: 'address', headerName: 'Address', width: 150 },
-  { field: 'contact', headerName: 'Contact', width: 150 },
-  { field: 'email', headerName: 'Email', width: 150 },
-  { field: 'createdAt', headerName: 'Registered Date', width: 130 },
-];
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 
 function Home() {
     
   const dispatch = useDispatch();
+  const data = useSelector(selectData);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [userData, setUserData] = useState({id: '',name: '', email: ''});
   const [selectionRow, setSelectionRow] = useState(true);
   const [selectionModel, setSelectionModel] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState(data);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
    useEffect(() => {
-    fetchUsers(); 
+    dispatch(fetchData('users'));
   }, []);
-  
-  const fetchUsers = async () => {
-      try {
-        // Get a reference to the 'users' collection in Firestore
-        const usersCollection = collection(db, 'users');
-        const usersSnapshot = await getDocs(usersCollection);
 
-        // Map each document to a user object
-        const usersList = usersSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-
-        // Update the users state
-        setUsers(usersList);
-
-
-        console.log(usersList);
-      } catch (err) {
-        setError(err.message);
-        console.log(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
 
   const handleDelete = async (id) => {
+
       const confirmed = window.confirm("Are you sure you want to delete this user?");
       
       if (confirmed) {
         try {
       await deleteDoc(doc(db, 'users', id)); // Delete the user document from Firestore
       setUsers(users.filter(user => user.id !== id)); // Update local state
+      dispatch(fetchData('users'));
+
       alert("User deleted successfully");
     } catch (err) {
       console.error("Error deleting user:", err);
@@ -91,12 +60,15 @@ function Home() {
   };
 
   const handleSave = () => {
+
     const updatedUsers = setUsers((prevUsers) =>
       prevUsers.map((user) =>
         user.id === selectionModel.id ? { ...selectionModel } : user
       )
     );
-    console.log(updatedUsers);
+    dispatch(updateData( selectionModel.id,'users', updatedUsers));
+    dispatch(fetchData('users'));
+    // console.log(updatedUsers);
     handleDialogClose();
   };
 
@@ -108,7 +80,7 @@ function Home() {
 
   const handleSelectionChange = (ids) => {
     console.log(ids);    
-    const selectedRows = users.filter((row) => ids.includes(row.id));
+    const selectedRows = data.filter((row) => ids.includes(row.id));
     setSelectionModel(selectedRows);
     console.log(selectedRows);
   };
@@ -117,9 +89,12 @@ function Home() {
   const columns = [
     { field: 'id', headerName: 'ID', width:100 },
     { field: 'name', headerName: 'Name', width: 150 },
-    { field: 'age', headerName: 'Age', width: 100 },
     { field: 'address', headerName: 'Address', width: 100 },
     { field: 'contact', headerName: 'Contact', width: 100 },
+    { field: 'status', headerName: 'Status', align: 'center',
+      renderCell: (params) => <span className={params.value === 'Active' ? 'text-green-500' : 'text-red-500'}>{params.value}</span>, 
+      width: 100 
+    },
     {
       field: 'actions',
       type: 'actions',
@@ -140,7 +115,7 @@ function Home() {
       <CardContainer title="Users">
         <div className="flex ">
           <div className="w-1/2 ">
-            <DaataGridTable selectedRowData={handleSelectionChange} selectionRow={selectionRow} col={columns} rowData={users} />
+            <DaataGridTable selectedRowData={handleSelectionChange} selectionRow={selectionRow} col={columns} rowData={data} />
           </div>
           <div className="flex ml-4 shadow-lg rounded-lg w-1/2 p-2  flex-col justify-evenly" style={{ backgroundColor: '#0B5A81', color: 'white' }}>
             <h2 className="text-4xl font-semibold text-center">Users Profile</h2>

@@ -5,7 +5,7 @@ const InputField = forwardRef(({ label, error, ...inputProps }, ref) => {
   const id = useId() + '-' + inputProps.name
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium leading-6 text-gray-900">
+      <label htmlFor={id} className="block text-sm font-medium leading-6 text-white">
         {label}
       </label>
       <div className="mt-2">

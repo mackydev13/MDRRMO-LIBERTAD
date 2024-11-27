@@ -8,8 +8,8 @@ import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from 'firebase
 export const fetchData = createAsyncThunk('data/fetchData', async (parameter) => {
   const snapshot = await getDocs(collection(db, parameter));
   const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  console.log(data, 'users');
-  return  data;
+  console.log(data, 'incidents');
+  return data;
 });
 
 export const addData = createAsyncThunk('data/addData', async (addData,newData) => {
@@ -41,7 +41,6 @@ const dataSlice = createSlice({
     builder
       .addCase(fetchData.fulfilled, (state, action) => {
         state.data = action.payload;
-        state.status = 'succeeded';
       })
       .addCase(addData.fulfilled, (state, action) => {
         state.data.push(action.payload);
