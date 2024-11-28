@@ -1,4 +1,4 @@
-import { Dashboard,Home,AccountBox as User,Emergency } from '@mui/icons-material';
+import { Dashboard,Home,History, AccountBox as User,Emergency } from '@mui/icons-material';
 
 
 export const navigation = [
@@ -6,6 +6,7 @@ export const navigation = [
     { name: 'User Information', path: '/Info' , icon: <User />},
     { name: 'Emergency Reports', path: '/reports', icon: <Home />},
     {name: 'Emergency Hotline', path: '/hotline', icon: <Emergency />},
+    { name: 'History', path: '/history', icon: <History />},
 ]
 
 export const userNavigation = [

@@ -9,6 +9,8 @@ import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
 import CardContainer from 'components/ui-elements/CardContainer';
 import ReverseGeocode from 'components/ui-elements/ReverseGeocode';
+import { sendNotification } from 'components/ui-elements/sendNotification';
+
 
 
 
@@ -62,8 +64,9 @@ function Reports() {
     
     const incidentDoc = doc(db, 'incidents', id);
     await updateDoc(incidentDoc, { status: 'On-Going Rescue' });
+    await sendNotification( "csjqJUtqTrSPnNL_M_GOgo:APA91bGtLtfS_mw2oeUN3NIFDe6iBMP7-QQy-cFaTwLIPsgTDg671xn-d44cVmJQrruNXvx85WuqcDqAWGOPvcJfOadUgo3TtP0SOSpsNCd-43svAEx-pDA", 'Incident Accepted', 'Incident accepted by the responders');  
     console.log('Document updated successfully');
-    
+  
     const updatedIncidents = incidents.filter((row) => row.id !== id);
     setIncidents((prevIncidents) =>
       prevIncidents.map((incident) =>
