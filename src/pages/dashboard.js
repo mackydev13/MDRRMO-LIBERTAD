@@ -9,7 +9,9 @@ import { useEffect } from 'react';
 import { db } from '../configs/firebase';
 import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import { set } from 'store';
-
+import IncidentChart from 'components/chart/IncidentChart';
+import ActiveUsersChart from 'components/chart/ActiveUsersChart';
+import IncidentsPerMonthChart from 'components/chart/IncidentsPerMonthChart';
 
 const Dashboard = () => {
     const [user, setUser] = useState([]);
@@ -44,7 +46,7 @@ const CardData = [
         index: 1,
         title: <span className="text-4xl font-bold text-white p-2">Total Incidents</span>,
         value: <span className="text-4xl font-bold text-white p-2">{totalIncidents}</span>,
-        color: totalIncidents > 0 ? 'green' : 'red',
+        color: totalIncidents > 0 ? 'orange' : 'red',
         icon: <Report className="text-4xl font-bold text-white" />,
         link: '',
         data: [],
@@ -53,13 +55,13 @@ const CardData = [
         index: 2,
         title: <span className="text-4xl font-bold text-white p-2">Total On-Going Rescue</span>,
         value: <span className="text-4xl font-bold text-white p-2">{totalOnGoing}</span>,
-        color: totalOnGoing > 0 ? 'green' : 'red',
+        color: totalOnGoing > 0 ? 'blue' : 'red',
         icon: <EmergencyShare className="text-4xl font-bold text-white" />,
         link: '',
         data: [],
     },
     {
-        index: 4,
+        index: 3,
         title: <span className="text-4xl font-bold text-white p-2">Total Active Users</span>,
         value: <span className="text-4xl font-bold text-white p-2">{totalActive}</span>,
         color: totalActive > 0 ? 'green' : 'red',
@@ -70,10 +72,17 @@ const CardData = [
 ]
 
     return(
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="flex flex-col gap-4">
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             { CardData.map((card) => (
                 <CardContainer customStyle={{backgroundColor: card.color, height: '150px'}} color={card.color} key={card.index} title={card.title} value={card.value} icon={card.icon} link={card.link} data={card.data} />
             ))}
+         </div>
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+           <CardContainer title="Incident Chart" value={<IncidentChart incidents={incidents} />} />
+           <CardContainer title="Incidents Per Month Chart" value={<IncidentsPerMonthChart incidents={incidents} />} />
+           <CardContainer title="Active Users Chart" value={<ActiveUsersChart users={user} />} />
+            </div>
         </div>
     );
 }
