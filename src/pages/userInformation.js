@@ -13,6 +13,7 @@ import { Icon } from '@mui/material';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
+import FetchImageFromS3 from 'components/ui-elements/FetchImageFromS3';
 
 import { fetchData,selectData,addData, updateData, deleteData } from 'store/Data';
 
@@ -47,7 +48,7 @@ function Home() {
       setUsers(users.filter(user => user.id !== id)); // Update local state
       dispatch(fetchData('users'));
 
-      alert("User deleted successfully");
+      toast.success('User deleted successfully.');
     } catch (err) {
       console.error("Error deleting user:", err);
     }  
@@ -121,6 +122,8 @@ function Home() {
             <h2 className="text-4xl font-semibold text-center">Users Profile</h2>
             <div className="flex items-center">
             <div className="flex w-1/2 flex-col">
+              {/* {selectedRows[0]?.image && <img src={selectedRows[0]?.image} className="w-100 rounded-full object-cover p-2" />} */}
+              {/* <FetchImageFromS3 bucketName={'libertadimages'} imageKey={selectionModel[0]?.image?.split('/').pop() }/>                 */}
               <img src={selectionModel[0]?.image || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'} className="w-100 rounded-full object-cover p-2" />
               <p className="text-gray-600 text-center p-2 text-white"><strong>ID:</strong> {selectionModel[0]?.id}</p>
             </div>

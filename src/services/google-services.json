@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "97439655519",
+    "project_id": "mdrrmo-libertad-c72e0",
+    "storage_bucket": "mdrrmo-libertad-c72e0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:97439655519:android:2272a3e095230ee96c5dea",
+        "android_client_info": {
+          "package_name": "com.apprescue"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmrqsgntNQrtXEcpQZkvY8cCl_0Rr6d8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

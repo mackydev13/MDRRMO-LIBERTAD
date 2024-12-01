@@ -1,5 +1,6 @@
 import React, { useState ,useEffect} from 'react';
 import { db } from '../../configs/firebase';
+import { toast } from 'react-toastify';
 import { collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot } from 'firebase/firestore';
 
 const EmergencyHotlineCard = ({ onAddHotline, onUpdateHotline, editingHotline }) => {
@@ -31,7 +32,7 @@ const EmergencyHotlineCard = ({ onAddHotline, onUpdateHotline, editingHotline })
       setPhoneNumber('');
       setAddress('');
     } else {
-      alert('Please enter both a hotline name and phone number.');
+      toast.error('Please fill in all fields.');
     }
   };
 
