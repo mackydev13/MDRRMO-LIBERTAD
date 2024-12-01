@@ -4,6 +4,7 @@ import { doc, updateDoc } from 'firebase/firestore';
 import { db, auth } from '../configs/firebase';
 import CardContainer from 'components/ui-elements/CardContainer';
 import { LockOutlined, AccountCircleOutlined } from '@mui/icons-material';
+import { toast, ToastContainer } from 'react-toastify';
 
 function Settings() {
   const dispatch = useDispatch();
@@ -14,9 +15,6 @@ function Settings() {
   const [username, setUsername] = useState(user?.username || '');
   const [password, setPassword] = useState('');
 
-  // if (!user) {
-  //   return <p className="text-gray-500 text-center">Loading user information...</p>;
-  // }
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -30,11 +28,10 @@ function Settings() {
       if (password) {
         await auth.currentUser.updatePassword(password);
       }
-
-      alert('Settings updated successfully!');
-    } catch (error) {
+      toast.success('Settings updated successfully.');
+      } catch (error) {
       console.error('Error updating settings:', error);
-      alert('Failed to update settings.');
+      toast.error('Error updating settings. Please try again.');
     }
   };
 

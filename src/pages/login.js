@@ -4,11 +4,17 @@ import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
+import { useState } from 'react'
+
+import NotificationComponent from 'components/ui-elements/Notification'
+
+import { ToastContainer, toast } from 'react-toastify'
+
 import InputField from 'components/ui-elements/input-field'
 
 import { loginSchema } from 'configs/yup-validation-schemas'
 
-import { asyncLogin } from 'services/reqres/requests'
+import { asyncLogin , Notification, handleCloseNotification} from 'services/reqres/requests'
 
 function Login() {
   const dispatch = useDispatch()
@@ -21,12 +27,16 @@ function Login() {
     formState: { errors },
   } = useForm({ resolver })
 
+
+
   const onSubmit = data => {
-    console.log('onSubmit', data)
     dispatch(asyncLogin({ email: data.email, password: data.password }))
+    // setNotification({ open: true, message: 'Login successful', severity: 'success' });
   }
 
-  useAutoLogin() // will redirect to '/' or '/from-path' if user is logged in
+  useAutoLogin() 
+
+
 
   return (
     <div className='flex h-full justify-between'>
@@ -66,6 +76,12 @@ function Login() {
             className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           />
         </form>
+        <NotificationComponent
+        open={Notification.open}
+        message={Notification.message}
+        severity={Notification.severity}
+        onClose={handleCloseNotification}
+      />
 
         {/* <p className="mt-10 text-center text-sm text-gray-500">
           Don't have an account ?

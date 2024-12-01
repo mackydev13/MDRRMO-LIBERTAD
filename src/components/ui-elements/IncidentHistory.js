@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 
 const IncidentHistory = ({ incidents }) => {
   const [allIncidents, setAllIncidents] = useState([]);
-  const [approvedIncidents, setApprovedIncidents] = useState([]);
+  const [ResolvedIncidents, setResolvedIncidents] = useState([]);
   const [rejectedIncidents, setRejectedIncidents] = useState([]);
 
   // Process incidents to categorize by status
   useEffect(() => {
     setAllIncidents(incidents);
 
-    const approved = incidents.filter((incident) => incident.status === 'Approved');
-    setApprovedIncidents(approved);
+    const resolved = incidents.filter((incident) => incident.status === 'Resolved');
+    setResolvedIncidents(resolved);
 
     const rejected = incidents.filter((incident) => incident.status === 'On-Going Rescue');
     setRejectedIncidents(rejected);
@@ -28,8 +28,8 @@ const IncidentHistory = ({ incidents }) => {
 
       {/* Approved Incidents */}
       <section className="mb-8">
-        <h2 className="text-xl font-semibold mb-4 text-green-600">Approved Incidents</h2>
-        <Table data={approvedIncidents} />
+        <h2 className="text-xl font-semibold mb-4 text-green-600">Resolved Incidents</h2>
+        <Table data={ResolvedIncidents} />
       </section>
 
       {/* Rejected Incidents */}

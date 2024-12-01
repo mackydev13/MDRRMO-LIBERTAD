@@ -12,10 +12,18 @@ import { set } from 'store';
 import IncidentChart from 'components/chart/IncidentChart';
 import ActiveUsersChart from 'components/chart/ActiveUsersChart';
 import IncidentsPerMonthChart from 'components/chart/IncidentsPerMonthChart';
+import NotificationComponent from 'components/ui-elements/Notification';
+import { Notification, handleCloseNotification} from 'services/reqres/requests';
 
 const Dashboard = () => {
     const [user, setUser] = useState([]);
     const [incidents, setIncidents] = useState([]);
+
+    const [notification, setNotification] = useState({
+        open: false,
+        message: '',
+        severity: 'info', // "info", "success", "warning", "error"
+      });
 
 
   const totalActive = user.filter((item) => item.status === 'Active').length;
@@ -23,6 +31,7 @@ const Dashboard = () => {
   const totalOnGoing = incidents.filter((item) => item.status === 'On-Going Rescue').length;    
 
 useEffect(() => {
+    // console.log(Notification, 'notification');
     fetchDataUser();
     fetchDataIncidents();
 }, []);
@@ -73,6 +82,7 @@ const CardData = [
 
     return(
         <div className="flex flex-col gap-4">
+                    <NotificationComponent open={Notification.open} message={Notification.message} severity={Notification.severity} onClose={handleCloseNotification} />
              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             { CardData.map((card) => (
                 <CardContainer customStyle={{backgroundColor: card.color, height: '150px'}} color={card.color} key={card.index} title={card.title} value={card.value} icon={card.icon} link={card.link} data={card.data} />

@@ -10,7 +10,7 @@ import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
 import CardContainer from 'components/ui-elements/CardContainer';
 import ReverseGeocode from 'components/ui-elements/ReverseGeocode';
 import { sendNotification } from 'components/ui-elements/sendNotification';
-
+import FetchImageFromS3 from 'components/ui-elements/FetchImageFromS3';
 
 
 
@@ -62,20 +62,22 @@ function Reports() {
     const validation = window.confirm('Are you sure you want to accept this incident?');
     if (!validation) return;
     
-    const incidentDoc = doc(db, 'incidents', id);
-    await updateDoc(incidentDoc, { status: 'On-Going Rescue' });
     await sendNotification( "csjqJUtqTrSPnNL_M_GOgo:APA91bGtLtfS_mw2oeUN3NIFDe6iBMP7-QQy-cFaTwLIPsgTDg671xn-d44cVmJQrruNXvx85WuqcDqAWGOPvcJfOadUgo3TtP0SOSpsNCd-43svAEx-pDA", 'Incident Accepted', 'Incident accepted by the responders');  
-    console.log('Document updated successfully');
+
+
+    // const incidentDoc = doc(db, 'incidents', id);
+    // await updateDoc(incidentDoc, { status: 'On-Going Rescue' });
+    // console.log('Document updated successfully');
   
-    const updatedIncidents = incidents.filter((row) => row.id !== id);
-    setIncidents((prevIncidents) =>
-      prevIncidents.map((incident) =>
-        incident.id === id ? { ...incident, status: 'On-Going Rescue' } : incident
-      )
-    );
+    // const updatedIncidents = incidents.filter((row) => row.id !== id);
+    // setIncidents((prevIncidents) =>
+    //   prevIncidents.map((incident) =>
+    //     incident.id === id ? { ...incident, status: 'On-Going Rescue' } : incident
+    //   )
+    // );
 
     incidents.map(loc => {
-      console.log(loc.location.latitude,loc.location.longitude);
+      // console.log(loc.location.latitude,loc.location.longitude);
       mapLocation(loc.location.latitude,loc.location.longitude);
     });
     
@@ -113,7 +115,7 @@ function Reports() {
 
   const columns = [
   {field: 'id',headerName: 'ID', width: 100},
-  {field: 'victimName',headerName: 'Victim', width: 150},
+  // {field: 'victimName',headerName: 'Victim', width: 150},
   {field: 'description',headerName: 'Description', width: 200},
   {field: 'status',headerName: 'Status', width: 150},
   {field: 'createdAt',headerName: 'Date', width: 150 },
@@ -155,7 +157,7 @@ function Reports() {
     }
   ];
 
-  console.log(selectedRows);
+  console.log(selectedRows, 'selectedRows');
 
 
   return (
@@ -169,7 +171,7 @@ function Reports() {
             <DataGridTable
               selectionRow={selection}
               col={columns}
-              rowData={incidents}
+              rowData={incidents.filter((incident) => incident.status !== 'Resolved')}
               selectedRowData={handleSelectionChange} // Callback for row selection
             />
             {error && <p>Error: {error}</p>}
@@ -180,11 +182,8 @@ function Reports() {
             <h2 className='p-2 text-center'><strong className="text-white">Status:</strong> <strong style={{color: 'green'}}>{selectedRows[0]?.status}</strong></h2>
               <div className="flex">
               <div className="w-full">
-              <img
-                src={selectedRows[0]?.imageUrl || require('../assets/test.jpeg')}
-                alt="Incident"
-                style={{ width: "100%", objectPosition: "center", objectFit: "cover", borderRadius: "10px" }}
-              />
+
+              <FetchImageFromS3 bucketName={'libertadimages'} imageKey={selectedRows[0]?.image.split('/').pop() || ''}/>                
             </div>
             <div className="flex flex-col w-full">
 
@@ -198,8 +197,8 @@ function Reports() {
                   </div>
                   <div className="flex flex-col text-white m-2">
                     <h2 className='p-2'><strong>Victim ID:</strong> {selectedRows[0]?.id}</h2>
-                    <h2 className='p-2'><strong>Victim Name:</strong> {selectedRows[0]?.victimName}</h2>
-                    <h2 className='p-2'><strong>Contact:</strong> {selectedRows[0]?.contact}</h2>
+                    {/* <h2 className='p-2'><strong>Victim Name:</strong> {selectedRows[0]?.victimName}</h2>
+                    <h2 className='p-2'><strong>Contact:</strong> {selectedRows[0]?.contact}</h2> */}
                   </div>
                   </div>
               </div>
