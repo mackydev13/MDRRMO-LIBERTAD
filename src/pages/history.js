@@ -29,7 +29,6 @@ const History = () => {
       setLoading(false);
     }
   };
-
     return (
         <CardContainer>
             <IncidentHistory incidents={incidents} loading={loading} error={error} />
