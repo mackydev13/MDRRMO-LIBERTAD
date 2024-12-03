@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { collection, getDocs, deleteDoc,updateDoc, doc } from 'firebase/firestore';
-import {db} from '../configs/firebase'
+import {db, onSnapshot} from '../configs/firebase'
 import MapTracker from 'components/ui-elements/MapTracker';
 import { GridRowModes,GridActionsCellItem } from '@mui/x-data-grid';
 import DataGridTable from "components/ui-elements/DataGridTable";
@@ -32,19 +32,24 @@ function Reports() {
   }, []);
 
    const fetchIncidents = async () => {
-      try {
-        const incidentsCollection = collection(db, 'incidents'); // Ensure 'incidents' is the corr/ect collection name 
-        const incidentsSnapshot = await getDocs(incidentsCollection);
-        const incidentsList = incidentsSnapshot.docs.map(doc => ({
+    const incidentsCollection = collection(db, 'incidents');
+    const unsubscribe = onSnapshot(
+      incidentsCollection,
+      (snapshot) => {
+        const incidentsList = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
         setIncidents(incidentsList);
-      } catch (err) {
+        setLoading(false);
+      },
+      (err) => {
         setError(err.message);
-      } finally {
         setLoading(false);
       }
+    );
+
+    return () => unsubscribe();
     };
   
   const deleteIncident = (id) => async () => {
@@ -62,19 +67,19 @@ function Reports() {
     const validation = window.confirm('Are you sure you want to accept this incident?');
     if (!validation) return;
     
-    await sendNotification( "csjqJUtqTrSPnNL_M_GOgo:APA91bGtLtfS_mw2oeUN3NIFDe6iBMP7-QQy-cFaTwLIPsgTDg671xn-d44cVmJQrruNXvx85WuqcDqAWGOPvcJfOadUgo3TtP0SOSpsNCd-43svAEx-pDA", 'Incident Accepted', 'Incident accepted by the responders');  
+    // await sendNotification( "csjqJUtqTrSPnNL_M_GOgo:APA91bGtLtfS_mw2oeUN3NIFDe6iBMP7-QQy-cFaTwLIPsgTDg671xn-d44cVmJQrruNXvx85WuqcDqAWGOPvcJfOadUgo3TtP0SOSpsNCd-43svAEx-pDA", 'Incident Accepted', 'Incident accepted by the responders');  
 
 
-    // const incidentDoc = doc(db, 'incidents', id);
-    // await updateDoc(incidentDoc, { status: 'On-Going Rescue' });
-    // console.log('Document updated successfully');
+    const incidentDoc = doc(db, 'incidents', id);
+    await updateDoc(incidentDoc, { status: 'On-Going Rescue' });
+    console.log('Document updated successfully');
   
-    // const updatedIncidents = incidents.filter((row) => row.id !== id);
-    // setIncidents((prevIncidents) =>
-    //   prevIncidents.map((incident) =>
-    //     incident.id === id ? { ...incident, status: 'On-Going Rescue' } : incident
-    //   )
-    // );
+    const updatedIncidents = incidents.filter((row) => row.id !== id);
+    setIncidents((prevIncidents) =>
+      prevIncidents.map((incident) =>
+        incident.id === id ? { ...incident, status: 'On-Going Rescue' } : incident
+      )
+    );
 
     incidents.map(loc => {
       // console.log(loc.location.latitude,loc.location.longitude);

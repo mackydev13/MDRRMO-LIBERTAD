@@ -82,7 +82,7 @@ const CardData = [
 
     return(
         <div className="flex flex-col gap-4">
-                    <NotificationComponent open={Notification.open} message={Notification.message} severity={Notification.severity} onClose={handleCloseNotification} />
+        {/* <NotificationComponent open={Notification.open} message={Notification.message} severity={Notification.severity} onClose={handleCloseNotification} /> */}
              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             { CardData.map((card) => (
                 <CardContainer customStyle={{backgroundColor: card.color, height: '150px'}} color={card.color} key={card.index} title={card.title} value={card.value} icon={card.icon} link={card.link} data={card.data} />
