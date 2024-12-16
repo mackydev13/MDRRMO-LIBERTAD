@@ -88,7 +88,7 @@ function Home() {
 
 
   const columns = [
-    { field: 'id', headerName: 'ID', width:100 },
+    { field: 'userId', headerName: 'ID', width:100 },
     { field: 'name', headerName: 'Name', width: 150 },
     { field: 'address', headerName: 'Address', width: 100 },
     { field: 'contact', headerName: 'Contact', width: 100 },
@@ -125,7 +125,7 @@ function Home() {
               {/* {selectedRows[0]?.image && <img src={selectedRows[0]?.image} className="w-100 rounded-full object-cover p-2" />} */}
               {/* <FetchImageFromS3 bucketName={'libertadimages'} imageKey={selectionModel[0]?.image?.split('/').pop() }/>                 */}
               <img src={selectionModel[0]?.image || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'} className="w-100 rounded-full object-cover p-2" />
-              <p className="text-gray-600 text-center p-2 text-white"><strong>ID:</strong> {selectionModel[0]?.id}</p>
+              <p className="text-gray-600 text-center p-2 text-white"><strong>ID:</strong> {selectionModel[0]?.userId}</p>
             </div>
             <div className="flex flex-col w-1/2 p-2">
               <h3 className="text-3xl font-semibold  mb-2 text-center p-2">Information</h3>
@@ -135,6 +135,10 @@ function Home() {
               <p className="text-gray-600 p-2 text-white"><strong>Contact:</strong> {selectionModel[0]?.contact}</p>
               <p className="text-gray-600 p-2 text-white"><strong>Email:</strong> {selectionModel[0]?.email}</p>
               <p className="text-gray-600 p-2 text-white"><strong>Registered Date:</strong> {selectionModel[0]?.createdAt.toDate().toLocaleDateString()}</p>
+            </div>
+            <div className="flex flex-col justify-center">
+              <h3 className="text-3xl font-semibold  mb-2 text-center p-2">Verified ID</h3>
+              <FetchImageFromS3 bucketName={'libertadimages'} imageKey={selectionModel[0]?.idImage?.split('/').pop() }/>
             </div>
             </div>
           </div>
