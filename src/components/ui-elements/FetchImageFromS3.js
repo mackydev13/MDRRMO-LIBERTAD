@@ -4,7 +4,7 @@ import AWS from 'aws-sdk';
 const FetchImageFromS3 = ({ bucketName, imageKey }) => {
   const [imageUrl, setImageUrl] = useState(null);
   const [error, setError] = useState(null);
-
+  console.log(imageKey);
   useEffect(() => {
     const fetchImage = async () => {
       try {
@@ -38,7 +38,7 @@ const FetchImageFromS3 = ({ bucketName, imageKey }) => {
   return (
     <div>
       {imageUrl ? (
-        <img src={imageUrl} alt="Image"  style={{ width: "100%", objectPosition: "center", objectFit: "cover", borderRadius: "10px" }} />
+        <img src={imageUrl} alt="Image"  style={{ width: "100%", height: "300px", objectPosition: "center", objectFit: "cover", borderRadius: "10px" }} />
       ) : (
          <img src={require('../../assets/libertad.png')} alt="Incident" style={{ width: "100%", objectPosition: "center", objectFit: "cover", borderRadius: "10px" }}/> 
       )}
