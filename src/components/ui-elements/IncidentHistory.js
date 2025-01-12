@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs, deleteDoc } from 'firebase/firestore';
 import { firestore } from '../../configs/firebase';
+
+import logo from '../../assets/libertad.png'
+
 const IncidentHistory = ({ incidents }) => {
   const [allIncidents, setAllIncidents] = useState([]);
   const [ResolvedIncidents, setResolvedIncidents] = useState([]);
@@ -8,44 +11,115 @@ const IncidentHistory = ({ incidents }) => {
 
 
   const printIncidentsHistory = () => {
-    const printWindow = window.open("");
+    // Create a hidden iframe
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
 
-  // Creating the table structure
-  printWindow.document.write("<h1>Incident Records</h1>");
-  printWindow.document.write("<table border='1' cellpadding='5' cellspacing='0' style='border-collapse: collapse;'>");
-  printWindow.document.write("<thead>");
-  printWindow.document.write("<tr>");
-  printWindow.document.write("<th>Incident ID</th>");
-  printWindow.document.write("<th>Name</th>");
-  printWindow.document.write("<th>Age</th>");
-  printWindow.document.write("<th>Address</th>");
-  printWindow.document.write("<th>Incident Type</th>");
-  printWindow.document.write("<th>Description</th>");
-  printWindow.document.write("<th>Emergency Level</th>");
-  printWindow.document.write("<th>Status</th>");
-  printWindow.document.write("<th>Date</th>");
-  printWindow.document.write("</tr>");
-  printWindow.document.write("</thead>");
-  
-  printWindow.document.write("<tbody>");
-  incidents.forEach((incident) => {
-    printWindow.document.write("<tr>");
-    printWindow.document.write(`<td>${incident.incidentId}</td>`);
-    printWindow.document.write(`<td>${incident.Name}</td>`);
-    printWindow.document.write(`<td>${incident.Age}</td>`);
-    printWindow.document.write(`<td>${incident.Address}</td>`);
-    printWindow.document.write(`<td>${incident.Cost}</td>`);
-    printWindow.document.write(`<td>${incident.description}</td>`);
-    printWindow.document.write(`<td>${incident.statusLevel}</td>`);
-    printWindow.document.write(`<td>${incident.status}</td>`);
-    printWindow.document.write(`<td>${incident.createdAt.toDate().toLocaleDateString()}</td>`);
-    printWindow.document.write("</tr>");
-  });
-  printWindow.document.write("</tbody>");
-  printWindow.document.write("</table>");
-  
-  printWindow.document.close();
-  printWindow.print();
+    const doc = iframe.contentWindow.document;
+
+    // Write the print content with portrait orientation
+    doc.write(`
+      <html>
+        <head>
+          <title>Incident Records</title>
+          <style>
+            @page {
+              size: A4 landscape;
+              margin: 20mm;
+            }
+
+            body {
+              text-align: center;
+              font-family: Arial, sans-serif;
+              margin: 0;
+              padding: 0;
+            }
+
+            .logo {
+              width: 100px;
+              height: 100px;
+              padding: 10px;
+              border-radius: 50%;
+              background-color: white;
+            }
+
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: 20px;
+            }
+
+            th, td {
+              border: 1px solid #000;
+              padding: 8px;
+              text-align: center;
+              font-size: 12px;
+            }
+
+            th {
+              background-color: #f2f2f2;
+            }
+
+            hr {
+              margin: 20px 0;
+            }
+          </style>
+        </head>
+        <body>
+          <div style="display: flex; align-items: center; justify-content: center;">
+            <img src="${logo}" class="logo" alt="logo" />
+            <div>
+              <h2 style="font-size: 24px; font-weight: 600; color: #1e3a8a;">MDRRMO LIBERTAD</h2>
+              <p style="color: #4b5563; font-size: 14px;">Libertad, Antique, Philippines</p>
+            </div>
+          </div>
+          <hr />
+          <table>
+            <thead>
+              <tr>
+                <th>Incident ID</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Address</th>
+                <th>Incident Type</th>
+                <th>Description</th>
+                <th>Emergency Level</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${incidents.map(incident => `
+                <tr>
+                  <td>${incident.incidentId}</td>
+                  <td>${incident.Name}</td>
+                  <td>${incident.Age}</td>
+                  <td>${incident.Address}</td>
+                  <td>${incident.Cost}</td>
+                  <td>${incident.description}</td>
+                  <td>${incident.statusLevel}</td>
+                  <td>${incident.status}</td>
+                  <td>${new Date(incident.createdAt.toDate()).toLocaleDateString()}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </body>
+      </html>
+    `);
+
+    doc.close();
+
+    iframe.onload = () => {
+      iframe.contentWindow.focus();
+      iframe.contentWindow.print();
+
+      // Clean up after printing
+      setTimeout(() => {
+        document.body.removeChild(iframe);
+      }, 1000);
+    };
   };
 
 
@@ -76,9 +150,18 @@ const IncidentHistory = ({ incidents }) => {
     setRejectedIncidents(rejected);
   }, [incidents]);
 
+
   return (
     <div className="p-4">
-       <div>
+     
+      <div className="flex justify-center items-center">
+      <img src={logo} className="h-30 w-40 p-2 rounded-full bg-white" alt='logo' />
+      <div className="flex flex-col items-center">
+      <h2 className="text-5xl  font-semibold text-blue-800">MDRRMO LIBERTAD</h2>
+      <p className="text-gray-600">Libertad, Antique, Philippines</p>
+        </div>
+      </div>
+      <div className="flex justify-end mt-4">
       <button
         onClick={printIncidentsHistory}
         className="bg-blue-500 text-white py-2 px-4 rounded"
@@ -93,8 +176,6 @@ const IncidentHistory = ({ incidents }) => {
         Remove All Incidents
       </button>
     </div>
-      <h1 className="text-2xl font-bold mb-6">Incident History</h1>
-      
       {/* All Incidents */}
       <section className="mb-8">
         <h2 className="text-xl font-semibold mb-4">All Incidents</h2>
@@ -118,7 +199,6 @@ const IncidentHistory = ({ incidents }) => {
 
 // Table Component for displaying incidents
 const Table = ({ data }) => {
-  console.log(data);
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
@@ -129,14 +209,14 @@ const Table = ({ data }) => {
             <th className="py-2 px-4 text-left">Age</th>
             <th className="py-2 px-4 text-left">Address</th>
             <th className="py-2 px-4 text-left">Incident Type</th>
-            <th className="py-2 px-4 text-left">Incident</th>
+            <th className="py-2 px-4 text-left">Description</th>
             <th className="py-2 px-4 text-left">Status</th>
             <th className="py-2 px-4 text-left">Date</th>
           </tr>
         </thead>
         <tbody>
           {data.length === 0 ? (
-            <tr>
+            <tr >
               <td colSpan="4" className="text-center py-4 text-gray-500">
                 No incidents found.
               </td>
