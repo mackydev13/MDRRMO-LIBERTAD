@@ -12,6 +12,9 @@ import { set } from 'store';
 import IncidentChart from 'components/chart/IncidentChart';
 import ActiveUsersChart from 'components/chart/ActiveUsersChart';
 import IncidentsPerMonthChart from 'components/chart/IncidentsPerMonthChart';
+import BarangayIncidentChart from 'components/chart/BarangayIncidentChart';
+import VictimAgeChart from 'components/chart/VictimAgeChart';
+import IncidentType from 'components/chart/IncidentType';
 import NotificationComponent from 'components/ui-elements/Notification';
 import { Notification, handleCloseNotification} from 'services/reqres/requests';
 
@@ -28,7 +31,8 @@ const Dashboard = () => {
 
   const totalActive = user.filter((item) => item.status === 'Active').length;
   const totalIncidents = incidents.filter((item) => item.status === 'Pending').length;
-  const totalOnGoing = incidents.filter((item) => item.status === 'On-Going Rescue').length;    
+  const totalOnGoing = incidents.filter((item) => item.status === 'On-Going Rescue').length;  
+  const totalResolved = incidents.filter((item) => item.status === 'Resolved').length;  
 
 useEffect(() => {
     // console.log(Notification, 'notification');
@@ -90,8 +94,11 @@ const CardData = [
          </div>
            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
            <CardContainer title="Incident Chart" value={<IncidentChart incidents={incidents} />} />
-           <CardContainer title="Incidents Per Month Chart" value={<IncidentsPerMonthChart incidents={incidents} />} />
+           <CardContainer title="Months most incident" value={<IncidentsPerMonthChart incidents={incidents} />} />
            <CardContainer title="Active Users Chart" value={<ActiveUsersChart users={user} />} />
+           <CardContainer title="Baranggay most incident chart" value={<BarangayIncidentChart BarangayIncidents={incidents} />} />
+           <CardContainer title="Age Involved Chart" value={<VictimAgeChart incidents={incidents} />} />
+           <CardContainer title="Incident Type Chart" value={<IncidentType incidents={incidents} />} />
             </div>
         </div>
     );
