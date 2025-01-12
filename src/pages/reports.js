@@ -267,7 +267,6 @@ function Reports() {
       <div className="flex flex-col">
         <div style={{ margin: 5 }}>
           {<IncidentMapComponent incidents={incidents} selectedLocation={location} />}
-          {/* {<MapTracker initialLat={location.lat} initialLng={location.lng} />} */}
         </div>
         <div className="flex">
           <div>
