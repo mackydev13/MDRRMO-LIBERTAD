@@ -14,7 +14,7 @@ import Register from 'pages/register'
 import Reports from 'pages/reports'
 import ResetPassword from 'pages/reset-password'
 import Settings from 'pages/settings'
-import History from 'pages/history'
+import Record from 'pages/history'
 
 const routes = [
   {
@@ -47,8 +47,8 @@ const routes = [
         element: <Hotline />,
       },
       {
-        path: '/history',
-        element: <History />,
+        path: '/record',
+        element: <Record />,
       },
       {
         path: '/logout',

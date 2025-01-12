@@ -101,7 +101,7 @@ function MobileMenu() {
           >
             <span className="absolute -inset-1.5" />
             <span className="sr-only">View notifications</span>
-            <BellIcon className="h-6 w-6" aria-hidden="true" />
+            <BellIcon className="h-6 w-8" aria-hidden="true" />
           </button>
         </div>
         <div className="mt-3 space-y-1 px-2">

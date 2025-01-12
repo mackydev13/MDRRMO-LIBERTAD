@@ -11,7 +11,7 @@ const History = () => {
  const [error, setError] = useState(null)
 
  useEffect(() => {
-    fetchIncidents()
+    fetchIncidents();
  }, [])
 
  const fetchIncidents = async () => {

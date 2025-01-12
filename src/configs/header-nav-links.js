@@ -6,7 +6,7 @@ export const navigation = [
     { name: 'User Information', path: '/Info' , icon: <User />},
     { name: 'Emergency Reports', path: '/reports', icon: <Home />},
     {name: 'Emergency Hotline', path: '/hotline', icon: <Emergency />},
-    { name: 'History', path: '/history', icon: <History />},
+    { name: 'Emergency Record', path: '/record', icon: <History />},
 ]
 
 export const userNavigation = [
