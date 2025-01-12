@@ -264,10 +264,11 @@ function Reports() {
 
   return (
     <CardContainer>
-      <div className="flex flex-col">
-        <div style={{ margin: 5 }}>
+       <div style={{ margin: 5, zIndex: 1, position: 'relative' }}>
           {<IncidentMapComponent incidents={incidents} selectedLocation={location} />}
         </div>
+      <div className="flex flex-col">
+       
         <div className="flex">
           <div>
             <DataGridTable
@@ -364,23 +365,26 @@ function Reports() {
       <style>
         {`
           .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-          }
-          .modal-content {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            width: 400px;
-            max-width: 90%;
-          }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Increased z-index */
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  z-index: 10000; /* Modal content on top */
+}
           textarea {
             margin-bottom: 10px;
           }
