@@ -5,7 +5,7 @@ const VictimAgeChart = ({incidents}) => {
 
 
   const incidentsByAge = incidents.reduce((acc, incident) => {
-    const age = incident.Age;
+    const age = incident.age;
     if (age) {
       if (age >= 0 && age <= 10) {
         acc[0]++;

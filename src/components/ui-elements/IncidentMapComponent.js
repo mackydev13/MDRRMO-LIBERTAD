@@ -26,7 +26,7 @@ const ChangeMapView = ({ coords }) => {
       };
       
   return (
-    <MapContainer center={[11.76939, 121.91882]} zoom={6} style={{ height: '500px', margin: '0 auto'}}>
+    <MapContainer center={[11.76939, 121.91882]} zoom={5} style={{ height: '500px', margin: '0 auto'}}>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution="&copy; OpenStreetMap contributors"

@@ -116,7 +116,7 @@ function Home() {
       <CardContainer title="Users">
         <div className="flex ">
           <div className="w-1/2 ">
-            <DaataGridTable selectedRowData={handleSelectionChange} selectionRow={selectionRow} col={columns} rowData={data} />
+            <DaataGridTable dissableMultipleRowSelection={true} selectedRowData={handleSelectionChange}  selectionRow={selectionRow} col={columns} rowData={data} />
           </div>
           <div className="flex ml-4 shadow-lg rounded-lg w-1/2 p-2  flex-col justify-evenly" style={{ backgroundColor: '#0B5A81', color: 'white' }}>
             <h2 className="text-4xl font-semibold text-center">Users Profile</h2>

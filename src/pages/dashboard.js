@@ -21,6 +21,7 @@ import { Notification, handleCloseNotification} from 'services/reqres/requests';
 const Dashboard = () => {
     const [user, setUser] = useState([]);
     const [incidents, setIncidents] = useState([]);
+    const [involvedment, setInvolvedment] = useState([]);
 
     const [notification, setNotification] = useState({
         open: false,
@@ -38,6 +39,7 @@ useEffect(() => {
     // console.log(Notification, 'notification');
     fetchDataUser();
     fetchDataIncidents();
+    incidentDetails();
 }, []);
 
 
@@ -51,6 +53,12 @@ const fetchDataIncidents = async () => {
     const snapshot = await getDocs(collection(db, 'incidents'));
     const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     setIncidents(data);
+}
+
+const incidentDetails = async () => {
+    const snapshot = await getDocs(collection(db, 'Involvedment_Details'));
+    const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    setInvolvedment(data);
 }
 
 
@@ -96,9 +104,9 @@ const CardData = [
            <CardContainer title="Incident Chart" value={<IncidentChart incidents={incidents} />} />
            <CardContainer title="Months most incident" value={<IncidentsPerMonthChart incidents={incidents} />} />
            <CardContainer title="Active Users Chart" value={<ActiveUsersChart users={user} />} />
-           <CardContainer title="Baranggay most incident chart" value={<BarangayIncidentChart BarangayIncidents={incidents} />} />
-           <CardContainer title="Age Involved Chart" value={<VictimAgeChart incidents={incidents} />} />
-           <CardContainer title="Incident Type Chart" value={<IncidentType incidents={incidents} />} />
+           <CardContainer title="Baranggay most incident chart" value={<BarangayIncidentChart BarangayIncidents={involvedment} />} />
+           <CardContainer title="Age Involved Chart" value={<VictimAgeChart incidents={involvedment} />} />
+           <CardContainer title="Incident Type Chart" value={<IncidentType incidents={involvedment} />} />
             </div>
         </div>
     );

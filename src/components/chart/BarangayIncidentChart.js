@@ -5,7 +5,7 @@ const BarangayIncidentChart = ({ BarangayIncidents }) => {
 
 
   const incidentsByBarangay = BarangayIncidents.reduce((acc, incident) => {
-    const barangay = incident.Address;
+    const barangay = incident.baranggay;
     if (acc[barangay]) {
       acc[barangay]++;
     } else {

@@ -1,8 +1,18 @@
 // features/dataSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { db } from '../configs/firebase';
-import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { db , serverTimestamp } from '../configs/firebase';
+import { collection, addDoc, getDocs, updateDoc, docRef, deleteDoc, doc } from 'firebase/firestore';
 
+
+const serializeData = (data) => {
+  const serializedData = { ...data };
+  Object.keys(serializedData).forEach((key) => {
+    if (serializedData[key]?.seconds) {
+      serializedData[key] = new Date(serializedData[key].seconds * 1000).toISOString();
+    }
+  });
+  return serializedData;
+};
 
 // Async thunk for CRUD operations
 export const fetchData = createAsyncThunk('data/fetchData', async (parameter) => {
@@ -13,8 +23,19 @@ export const fetchData = createAsyncThunk('data/fetchData', async (parameter) =>
 });
 
 export const addData = createAsyncThunk('data/addData', async (addData,newData) => {
-  const docRef = await addDoc(collection(db,addData ), newData);
-  return { id: docRef.id, ...newData };
+
+  const Data = {
+    ...newData,
+    createdAt: serverTimestamp(),
+  }
+
+  console.log(Data, 'data');
+  const docRef = await addDoc(collection(db,addData ), ...Data);
+  const docSnapshot = await docRef.get();
+
+  const serializedData = serializeData({ id: docRef.id, ...docSnapshot.data() });
+
+  return { id: docRef.id, ...serializedData };
 });
 
 export const updateData = createAsyncThunk('data/updateData', async ({ id, updatedData }) => {

@@ -7,7 +7,7 @@ import {
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
 
-function DataGridTable({col, rowData, selectionRow,selectedRowData}) {
+function DataGridTable({col, rowData, selectionRow,selectedRowData, dissableMultipleRowSelection}) {
 
   return (
     <Box
@@ -27,7 +27,7 @@ function DataGridTable({col, rowData, selectionRow,selectedRowData}) {
         columns={col}
         checkboxSelection={selectionRow}
         onRowSelectionModelChange={selectedRowData}
-        disableMultipleRowSelection={selectionRow}
+        disableMultipleRowSelection={dissableMultipleRowSelection}
       />
     </Box>
   );
