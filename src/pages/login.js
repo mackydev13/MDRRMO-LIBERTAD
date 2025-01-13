@@ -27,8 +27,6 @@ function Login() {
     formState: { errors },
   } = useForm({ resolver })
 
-
-
   const onSubmit = data => {
     dispatch(asyncLogin({ email: data.email, password: data.password }))
     // setNotification({ open: true, message: 'Login successful', severity: 'success' });

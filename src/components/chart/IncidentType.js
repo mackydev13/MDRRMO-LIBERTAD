@@ -2,13 +2,13 @@ import React from 'react';
 import { Bar } from 'react-chartjs-2';
 
 const IncidentType = ({ incidents }) => {
+  console.log(incidents, 'incidents');
   // Sample incident data
   // Process incident data with validation
   const incidentData = incidents.map((incident) => ({
-    type: incident.Cost ? incident.Cost.trim() : 'Unknown', // Handle empty or undefined Cost
-    date: incident.date,
-    location: incident.location,
-    status: incident.status,
+    type: incident.causeOfIncident ? incident.causeOfIncident.trim() : 'Unknown', // Handle empty or undefined Cost
+    date: incident.createdAt.toDate().toLocaleDateString(),
+    location: incident.baranggay,
   }));
 
   // Function to count each incident type

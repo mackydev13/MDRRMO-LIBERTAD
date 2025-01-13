@@ -1,6 +1,6 @@
 // src/firebase.js
 import { initializeApp } from "firebase/app";
-import { getFirestore ,collection, getDocs, onSnapshot } from "firebase/firestore";
+import { getFirestore ,collection, getDocs, onSnapshot, serverTimestamp } from "firebase/firestore";
 import { getDatabase } from "firebase/database"; // For Realtime Database
 import { getAuth } from "firebase/auth";
 
@@ -28,5 +28,5 @@ const db = getFirestore(app);
 // Initialize Firebase Authentication
 const auth = getAuth(app);
 
-export { firestore, db ,auth, onSnapshot};
+export { firestore, db ,auth, onSnapshot, collection, getDocs, serverTimestamp };
 

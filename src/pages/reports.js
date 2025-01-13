@@ -74,7 +74,6 @@ function Reports() {
     
     // await sendNotification( "csjqJUtqTrSPnNL_M_GOgo:APA91bGtLtfS_mw2oeUN3NIFDe6iBMP7-QQy-cFaTwLIPsgTDg671xn-d44cVmJQrruNXvx85WuqcDqAWGOPvcJfOadUgo3TtP0SOSpsNCd-43svAEx-pDA", 'Incident Accepted', 'Incident accepted by the responders');  
 
-
     const incidentDoc = doc(db, 'incidents', id);
     await updateDoc(incidentDoc, { status: 'On-Going Rescue' });
     console.log('Document updated successfully');
@@ -96,9 +95,6 @@ function Reports() {
   }
   }
 
-
-
-
   const mapLocation = (lat, lng) => {
     setLocation({ lat: lat, lng: lng });
   }
@@ -117,16 +113,24 @@ function Reports() {
     const selectedData = incidents.filter((incident) =>
       selectionModel.includes(incident.id)
     );
-
     setSelectedRows(selectedData);
 
-    if (selectedData.length === 1) {
-      const selectedIncident = selectedData[0];
-      const lat = selectedIncident.location.latitude;
-      const lng = selectedIncident.location.longitude;
-      setLocation({ lat: lat, lng: lng });
-    }
+    // const selectedData = incidents.filter((incident) =>
+    //   selectionModel.includes(incident.id)
+    // );
 
+    // setSelectedRows(selectedData);
+
+    selectedData.forEach((incident) => {
+      setLocation({ lat: incident.location.latitude, lng: incident.location.longitude });
+    });
+    // if (selectedData.length === 1) {
+    //   const selectedIncident = selectedData[0];
+    //   const lat = selectedIncident.location.latitude;
+    //   const lng = selectedIncident.location.longitude;
+
+    //   setLocation({ lat: lat, lng: lng });
+    // }
   };
 
   const showLocation = (lat, lng) => () => {
@@ -146,7 +150,6 @@ function Reports() {
     // }
 
     try {
-      console.log(Name,Age,Address,Cost,currentIncidentId);
       const incidentDoc = doc(db, "incidents", currentIncidentId);
     
       await updateDoc(incidentDoc, {
@@ -239,44 +242,44 @@ function Reports() {
     { lat: 11.75987, lng: 121.91543 }, // Example: Another Incident
   ];
 
-  const [Baranggay, setBaranggay] = useState([
-    { label: 'Barusbus', value: 'Barusbus' },
-    { label: 'Bulanao', value: 'Bulanao' },
-    { label: 'Codiong', value: 'Codiong' },
-    { label: 'Cubay', value: 'Cubay' },
-    { label: 'Igcagay', value: 'Igcagay' },
-    { label: 'Inyawan', value: 'Inyawan' },
-    { label: 'Lindero', value: 'Lindero' },
-    { label: 'Maramig', value: 'Maramig' },
-    { label: 'Pucio', value: 'Pucio' },
-    { label: 'Pajo', value: 'Pajo' },
-    { label: 'Panangkilon', value: 'Panangkilon' },
-    { label: 'Paz', value: 'Paz' },
-    { label: 'Centro Este (Pob.)', value: 'Centro Este (Pob.)' },
-    { label: 'Centro Weste (Pob.)', value: 'Centro Weste (Pob.)' },
-    { label: 'San Roque', value: 'San Roque' },
-    { label: 'Tinigbas', value: 'Tinigbas' },
-    { label: 'Tinindugan', value: 'Tinindugan' },
-    { label: 'Taboc', value: 'Taboc' },
-    { label: 'Union', value: 'Union' },
-  ]);
-
-
+   
+      const [Baranggay, setBaranggay] = useState([
+          { label: 'Barusbus', value: 'Barusbus' },
+          { label: 'Bulanao', value: 'Bulanao' },
+          { label: 'Codiong', value: 'Codiong' },
+          { label: 'Cubay', value: 'Cubay' },
+          { label: 'Igcagay', value: 'Igcagay' },
+          { label: 'Inyawan', value: 'Inyawan' },
+          { label: 'Lindero', value: 'Lindero' },
+          { label: 'Maramig', value: 'Maramig' },
+          { label: 'Pucio', value: 'Pucio' },
+          { label: 'Pajo', value: 'Pajo' },
+          { label: 'Panangkilon', value: 'Panangkilon' },
+          { label: 'Paz', value: 'Paz' },
+          { label: 'Centro Este (Pob.)', value: 'Centro Este (Pob.)' },
+          { label: 'Centro Weste (Pob.)', value: 'Centro Weste (Pob.)' },
+          { label: 'San Roque', value: 'San Roque' },
+          { label: 'Tinigbas', value: 'Tinigbas' },
+          { label: 'Tinindugan', value: 'Tinindugan' },
+          { label: 'Taboc', value: 'Taboc' },
+          { label: 'Union', value: 'Union' },
+        ]);
+        
   return (
     <CardContainer>
        <div style={{ margin: 5, zIndex: 1, position: 'relative' }}>
-          {<IncidentMapComponent incidents={incidents} selectedLocation={location} />}
+          {<IncidentMapComponent incidents={incidents.filter((incident) => incident.status !== 'Resolved' && incident.status !== 'Rejected')} selectedLocation={location} />}
         </div>
       <div className="flex flex-col">
        
         <div className="flex">
           <div>
-            <DataGridTable
-              selectionRow={selection}
-              col={columns}
-              rowData={incidents.filter((incident) => incident.status !== 'Resolved' && incident.status !== 'Rejected')}
-              selectedRowData={handleSelectionChange} // Callback for row selection
-            />
+           <DataGridTable
+          selectionRow={selection}
+          col={columns}
+          rowData={incidents.filter((incident) => incident.status !== 'Resolved' && incident.status !== 'Rejected')}
+          selectedRowData={handleSelectionChange}  // Callback for row selection
+          />
             {error && <p>Error: {error}</p>}
           </div>
           <div className="flex flex-col  max-w-1/2 ml-4 shadow-lg rounded-lg justify-evenly p-2 w-1/2" style={{ width: "100%" , backgroundColor: '#0B5A81'}}>
