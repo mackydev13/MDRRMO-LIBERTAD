@@ -31,9 +31,7 @@ function Reports() {
   const [currentIncidentId, setCurrentIncidentId] = useState(null);
 
   useEffect(() => {
-   
     fetchIncidents();
-  
   }, []);
 
    const fetchIncidents = async () => {
@@ -115,22 +113,9 @@ function Reports() {
     );
     setSelectedRows(selectedData);
 
-    // const selectedData = incidents.filter((incident) =>
-    //   selectionModel.includes(incident.id)
-    // );
-
-    // setSelectedRows(selectedData);
-
     selectedData.forEach((incident) => {
       setLocation({ lat: incident.location.latitude, lng: incident.location.longitude });
     });
-    // if (selectedData.length === 1) {
-    //   const selectedIncident = selectedData[0];
-    //   const lat = selectedIncident.location.latitude;
-    //   const lng = selectedIncident.location.longitude;
-
-    //   setLocation({ lat: lat, lng: lng });
-    // }
   };
 
   const showLocation = (lat, lng) => () => {

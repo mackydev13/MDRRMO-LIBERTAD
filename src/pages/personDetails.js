@@ -20,6 +20,7 @@ import { fetchData,selectData,addData, updateData, deleteData } from 'store/Data
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
 function PersonDetails() {
 
     const dispatch = useDispatch();
@@ -30,7 +31,7 @@ function PersonDetails() {
     const [users, setUsers] = useState(data);
     const [action, setAction] = useState('');
     const [error, setError] = useState(null);
-    
+
      useEffect(() => {
       fetchData();
     }, []);
@@ -44,7 +45,7 @@ function PersonDetails() {
           ...doc.data(),
         }));
         setUsers(usersData);
-        dispatch(addData('Involvedment_Details', usersData));
+        // dispatch(addData('Involvedment_Details', usersData));
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -53,7 +54,6 @@ function PersonDetails() {
     const handleDelete = async (id) => {
   
         const confirmed = window.confirm("Are you sure you want to delete this user?");
-        
         if (confirmed) {
           try {
         await deleteDoc(doc(db, 'Involvedment_Details', id)); // Delete the user document from Firestore
@@ -79,6 +79,7 @@ function PersonDetails() {
               createdAt: serverTimestamp(),
             });
             setIsDialogOpen(false);
+            dispatch(fetchData('Involvedment_Details'));
             console.log("Document written with ID: ", docRef.id);
           } catch (error) {
             console.error("Error adding document: ", error);
@@ -98,16 +99,16 @@ function PersonDetails() {
     
 
     const handleUpdate = async (data) => {
-    console.log(data);
-
-      // try {
-      //   const docRef = doc(db, 'Involvedment_Details', data.id);
-      //   await updateDoc(docRef, data);
-      //   setIsDialogOpen(false);
-      //   console.log("Document updated successfully");
-      // } catch (error) {
-      //   console.error("Error updating document:", error);
-      // }
+      try {
+        const docRef = doc(db, 'Involvedment_Details', data.id);
+        await updateDoc(docRef, selectionModel);
+        setIsDialogOpen(false);
+        dispatch(fetchData('Involvedment_Details'));
+        toast.success('User updated successfully.');
+      } catch (error) {
+        console.error("Error updating user:", error);
+        toast.error('Error updating user. Please try again.');
+      }
     };
   
     const columns = [
