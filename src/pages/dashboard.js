@@ -17,18 +17,15 @@ import VictimAgeChart from 'components/chart/VictimAgeChart';
 import IncidentType from 'components/chart/IncidentType';
 import NotificationComponent from 'components/ui-elements/Notification';
 import { Notification, handleCloseNotification} from 'services/reqres/requests';
+import ActionNotification from 'components/ui-elements/ActionNotification';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Dashboard = () => {
     const [user, setUser] = useState([]);
     const [incidents, setIncidents] = useState([]);
     const [involvedment, setInvolvedment] = useState([]);
-
-    const [notification, setNotification] = useState({
-        open: false,
-        message: '',
-        severity: 'info', // "info", "success", "warning", "error"
-      });
-
+    const [open ,setOpen] = useState(false);
 
   const totalActive = user.filter((item) => item.status === 'Active').length;
   const totalIncidents = incidents.filter((item) => item.status === 'Pending').length;
@@ -94,7 +91,6 @@ const CardData = [
 
     return(
         <div className="flex flex-col gap-4">
-        {/* <NotificationComponent open={Notification.open} message={Notification.message} severity={Notification.severity} onClose={handleCloseNotification} /> */}
              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             { CardData.map((card) => (
                 <CardContainer customStyle={{backgroundColor: card.color, height: '150px'}} color={card.color} key={card.index} title={card.title} value={card.value} icon={card.icon} link={card.link} data={card.data} />
@@ -108,6 +104,8 @@ const CardData = [
            <CardContainer title="Age Involved Chart" value={<VictimAgeChart incidents={involvedment} />} />
            <CardContainer title="Incident Type Chart" value={<IncidentType incidents={involvedment} />} />
             </div>
+            <ToastContainer />
+
         </div>
     );
 }

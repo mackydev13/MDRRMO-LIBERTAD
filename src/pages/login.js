@@ -8,17 +8,17 @@ import { useState } from 'react'
 
 import NotificationComponent from 'components/ui-elements/Notification'
 
-import { ToastContainer, toast } from 'react-toastify'
-
 import InputField from 'components/ui-elements/input-field'
 
 import { loginSchema } from 'configs/yup-validation-schemas'
 
 import { asyncLogin , Notification, handleCloseNotification} from 'services/reqres/requests'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Login() {
   const dispatch = useDispatch()
-
+  
   const resolver = useYupValidationResolver(loginSchema)
 
   const {
@@ -28,8 +28,7 @@ function Login() {
   } = useForm({ resolver })
 
   const onSubmit = data => {
-    dispatch(asyncLogin({ email: data.email, password: data.password }))
-    // setNotification({ open: true, message: 'Login successful', severity: 'success' });
+    dispatch(asyncLogin({ email: data.email, password: data.password }));
   }
 
   useAutoLogin() 
@@ -74,12 +73,13 @@ function Login() {
             className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           />
         </form>
-        <NotificationComponent
+        <ToastContainer />
+        {/* <NotificationComponent
         open={Notification.open}
         message={Notification.message}
         severity={Notification.severity}
         onClose={handleCloseNotification}
-      />
+      /> */}
 
         {/* <p className="mt-10 text-center text-sm text-gray-500">
           Don't have an account ?

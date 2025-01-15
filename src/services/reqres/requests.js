@@ -21,7 +21,6 @@ const asyncRegister = ({ firstName, lastName, email, password }) => async (dispa
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
    
-    
     // Dispatch login with Firebase user data
     dispatch(login({ user: { id: user.uid, email: user.email, firstName, lastName }, token: user.accessToken }));
     Notification.open = true;
@@ -33,29 +32,31 @@ const asyncRegister = ({ firstName, lastName, email, password }) => async (dispa
     Notification.open = true;
     Notification.message = 'Registration failed. Please try again.';
     Notification.severity = 'error';
-    // Handle registration error if needed
   }
 };
 
 // Login function
-const asyncLogin = ({ email, password }, showNotification) => async (dispatch) => {
+const asyncLogin = ({ email, password }) => async (dispatch) => {
   try {
     // Sign in with Firebase
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
     
-    Notification.open = true;
-    Notification.message = 'Login successful ';
-    Notification.severity = 'success';
+   Notification.open = true;
+   Notification.message = 'Login successful.';
+   Notification.severity = 'success';
+
 
     // Dispatch login with Firebase user data
     dispatch(login({ user: { id: user.uid, email: user.email }, token: user.accessToken }));   
 
   } catch (error) {
-    console.error("Login Error:", error.message);   
-    Notification.open = true;
-    Notification.message = 'Login failed. Please try again.';
-    Notification.severity = 'error';
+
+
+    // console.error("Login Error:", error.message);   
+    // Notification.open = true;
+    // Notification.message = 'Login failed. Please try again.';
+    // Notification.severity = 'error';
     // Handle login error if needed
   } 
 };
@@ -66,11 +67,9 @@ const asyncLogout = () => async (dispatch) => {
   Notification.message = 'Logout successful.';
   Notification.severity = 'success';
   try {
-    // Sign out with Firebase
     await signOut(auth);
     dispatch(logout());
 
-    // Notification.open = false;
     toast.success('Logout successful.');
   } catch (error) {
     console.error("Logout Error:", error.message);
@@ -80,9 +79,7 @@ const asyncLogout = () => async (dispatch) => {
 const handleCloseNotification = () => {
   console.log('Notification closed');
 
-  Notification.open = false;
-  Notification.message = '';
-  Notification.severity = 'info';
+  // Notification.open = false;
 };
 
 
