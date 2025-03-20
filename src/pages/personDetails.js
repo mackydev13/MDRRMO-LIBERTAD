@@ -74,8 +74,10 @@ function PersonDetails() {
   
     const handleSave = async ()  => {
         try {
+            const userID = Math.floor(100000 + Math.random() * 900000); // ;
             const docRef = await addDoc(collection(db, 'Involvedment_Details'), {
               ...selectionModel,
+              UserID: userID,
               createdAt: serverTimestamp(),
             });
             setIsDialogOpen(false);
@@ -112,7 +114,7 @@ function PersonDetails() {
     };
   
     const columns = [
-      { field: 'id', headerName: 'ID', width:100 },
+      { field: 'UserID', headerName: 'ID', width:100 },
       { field: 'name', headerName: 'Name', width: 150 },
       { field: 'age', headerName: 'Age', width: 100 },
       { field: 'baranggay', headerName: 'Address', width: 100 },
