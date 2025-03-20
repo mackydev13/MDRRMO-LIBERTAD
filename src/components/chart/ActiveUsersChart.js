@@ -15,7 +15,7 @@ const ActiveUsersChart = ({ users }) => {
     labels: ['Active Users', 'Inactive Users'],
     datasets: [
       {
-        label: 'Users',
+        label: 'Users %',
         data: [activeCount, inactiveCount],
         backgroundColor: ['rgba(54, 162, 235, 0.5)', 'rgba(255, 99, 132, 0.5)'],
         borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)'],

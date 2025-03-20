@@ -14,7 +14,6 @@ const customIcon = new L.Icon({
 const IncidentMapComponent = ({ incidents , selectedLocation = null}) => {
 
 
-  
 const ChangeMapView = ({ coords }) => {
     const map = useMap();
         useEffect(() => {

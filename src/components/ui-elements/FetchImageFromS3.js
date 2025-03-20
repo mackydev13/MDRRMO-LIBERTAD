@@ -10,8 +10,8 @@ const FetchImageFromS3 = ({ bucketName, imageKey }) => {
       try {
         // Configure AWS SDK
         const s3 = new AWS.S3({
-          accessKeyId: 'AKIARFVXKBW2POPZFF2Q',
-          secretAccessKey: 'VKpsoTFWOgor6w9Ihm2FgonB8UXQgxfDWnLTRxxs',
+          accessKeyId: '',
+          secretAccessKey: '',
           region: 'ap-northeast-1', // Example: 'us-east-1'
         });
 
@@ -38,9 +38,9 @@ const FetchImageFromS3 = ({ bucketName, imageKey }) => {
   return (
     <div>
       {imageUrl ? (
-        <img src={imageUrl} alt="Image"  style={{ width: "100%", height: "300px", objectPosition: "center", objectFit: "cover", borderRadius: "10px" }} />
+        <img src={imageUrl} alt="Image" style={{ width: "100%", height: "300px", objectPosition: "center", objectFit: "cover", borderRadius: "10px" }} />
       ) : (
-         <img src={require('../../assets/libertad.png')} alt="Incident" style={{ width: "100%", objectPosition: "center", objectFit: "cover", borderRadius: "10px" }}/> 
+        <img src={require('../../assets/libertad.png')} alt="Incident" style={{ width: "100%", objectPosition: "center", objectFit: "cover", borderRadius: "10px" }} />
       )}
     </div>
   );

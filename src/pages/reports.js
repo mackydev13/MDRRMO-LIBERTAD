@@ -29,6 +29,16 @@ function Reports() {
   const [Address, setAddress] = useState("");
   const [Cost, setCost] = useState("");
   const [currentIncidentId, setCurrentIncidentId] = useState(null);
+  const [emptyRows, setEmptyRows] = useState('');
+
+
+  const handleBlur = () => {
+    if (!Name.trim() || !Age.trim() || !Address.trim() || Cost.trim()) {
+      setEmptyRows(' Please fill in all the required fields.');
+    } else {
+      setEmptyRows('');
+    }
+  };
 
   useEffect(() => {
     fetchIncidents();
@@ -129,10 +139,10 @@ function Reports() {
   };
 
   const handleResolveSubmit = async () => {
-    // if (!resolveDetails.trim()) {
-    //   alert("Please enter details about the resolution.");
-    //   return;
-    // }
+    if (!Name.trim() || !Age.trim() || !Address.trim() || Cost.trim() === '') {
+      alert("Please enter details about the resolution.");
+      return;
+    }
 
     try {
       const incidentDoc = doc(db, "incidents", currentIncidentId);
@@ -219,13 +229,7 @@ function Reports() {
     }
   ];
 
-  console.log(selectedRows, 'selectedRows');
 
-  const incidentLocations = [
-    { lat: 11.76939, lng: 121.91882 }, // Example: Libertad
-    { lat: 11.76456, lng: 121.92376 }, // Example: Nearby Incident
-    { lat: 11.75987, lng: 121.91543 }, // Example: Another Incident
-  ];
 
    
       const [Baranggay, setBaranggay] = useState([
@@ -304,20 +308,28 @@ function Reports() {
         <div className="modal">
           <div className="modal-content">
             <h2 className='text-center text-2xl font-bold'>Resolve Incident</h2>
-            <input
+            <div>
+             <input
               type="text"
               className='w-full p-2 m-1 bg-gray-200 rounded-lg' 
               value={Name}
               onChange={(e) => setName(e.target.value)}
+              onBlur={handleBlur}
               placeholder="Enter Name of Liable"
             />
-             <input
+            {emptyRows && <p className="text-red-500 text-sm ml-1">{emptyRows}</p>}
+            </div>
+            <div>
+              <input
               type="text"
               className='w-full p-2 m-1 bg-gray-200 rounded-lg'
               value={Age}
               onChange={(e) => setAge(e.target.value)}
+              onBlur={handleBlur}
               placeholder="Enter Age of Victim"
             />
+            {emptyRows && <p className="text-red-500 text-sm ml-1">{emptyRows}</p>}
+            </div>
              <select
               className="w-full p-2 m-1 bg-gray-200 rounded-lg"
               value={Address}
